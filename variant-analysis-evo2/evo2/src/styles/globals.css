@@ -1,0 +1,173 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: 'Inter', var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+}
+
+/* === Biotech Palette ===
+   Background: #F4FBF8  (barely-there mint-white)
+   Cards: #FFFFFF/60    (glass white)
+   Primary: #0A2818     (deep forest green text)
+   Emerald: #059669     (primary action)
+   Teal:    #0891B2     (secondary accent)
+   Border:  #CDEEDA     (very light green)
+   Muted:   #5F8272     (sage gray-green)
+*/
+
+:root {
+  --radius: 0.75rem;
+  --background: #F4FBF8;
+  --foreground: #0A2818;
+  --card: #FFFFFF;
+  --card-foreground: #0A2818;
+  --popover: #FFFFFF;
+  --popover-foreground: #0A2818;
+  --primary: #059669;
+  --primary-foreground: #FFFFFF;
+  --secondary: #ECFDF5;
+  --secondary-foreground: #064E3B;
+  --muted: #EEF7F3;
+  --muted-foreground: #5F8272;
+  --accent: #0891B2;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --border: #CDEEDA;
+  --input: #D6F0E4;
+  --ring: #059669;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+}
+
+@layer components {
+  .biotech-card {
+    @apply bg-white/40 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(167,217,192,0.1)] rounded-2xl;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .biotech-card:hover {
+    @apply bg-white/60 border-white/60 shadow-[0_12px_40px_0_rgba(167,217,192,0.15)];
+    transform: translateY(-2px);
+  }
+}
+
+/* ===== DNA Loader ===== */
+.dna-loader {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  position: relative;
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+.dna-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  position: relative;
+  animation: dna-wave 1.4s ease-in-out infinite;
+}
+
+.dna-dot:nth-child(odd) {
+  background: #059669;
+  box-shadow: 0 2px 12px rgba(5, 150, 105, 0.4);
+}
+
+.dna-dot:nth-child(even) {
+  background: #0891B2;
+  margin-left: -4px;
+  box-shadow: 0 2px 12px rgba(8, 145, 178, 0.4);
+}
+
+.dna-dot:nth-child(1)  { animation-delay: 0s; }
+.dna-dot:nth-child(2)  { animation-delay: 0.1s; }
+.dna-dot:nth-child(3)  { animation-delay: 0.2s; }
+.dna-dot:nth-child(4)  { animation-delay: 0.3s; }
+.dna-dot:nth-child(5)  { animation-delay: 0.4s; }
+.dna-dot:nth-child(6)  { animation-delay: 0.5s; }
+.dna-dot:nth-child(7)  { animation-delay: 0.6s; }
+.dna-dot:nth-child(8)  { animation-delay: 0.7s; }
+
+@keyframes dna-wave {
+  0%, 100% { transform: translateY(0px) scale(0.9); opacity: 0.7; }
+  25%       { transform: translateY(-16px) scale(1.3); opacity: 1; }
+  50%       { transform: translateY(0px) scale(0.9); opacity: 0.7; }
+  75%       { transform: translateY(16px) scale(1.3); opacity: 1; }
+}
+
+/* Slim scrollbar */
+::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #A7D9C0/40; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #059669/60; }
+
+/* Custom cursor */
+.cursor-dot {
+  pointer-events: none;
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #059669;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.cursor-ring {
+  pointer-events: none;
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(5, 150, 105, 0.4);
+  background: transparent;
+  transform: translate(-50%, -50%);
+  z-index: 9998;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
