@@ -504,7 +504,8 @@ export async function fetchClinvarVariantAnalysisData({
 }: {
   clinvarId: string;
   gene: GeneFromSearch;
-}) {
+}): Promise<ClinvarVariantAnalysis & Record<string, any>> {
+
   const summaryParams = new URLSearchParams({
     db: "clinvar",
     id: clinvarId,
@@ -512,8 +513,9 @@ export async function fetchClinvarVariantAnalysisData({
   });
 
   const summaryData = await fetchJson<any>(
-    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?${summaryParams.toString()}`,
+    `https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?${summaryParams.toString()}`
   );
+
   const variant = summaryData.result?.[clinvarId];
 
   if (!variant) {
@@ -527,39 +529,96 @@ export async function fetchClinvarVariantAnalysisData({
     geneSummary = geneDetailData.geneDetails?.summary ?? null;
   }
 
-  const genes = String(variant.gene_sort ?? "")
-    .split(/[;,]/)
-    .map((entry) => entry.trim())
-    .filter(Boolean);
+  const genes =
+    typeof variant.gene_sort === "string"
+      ? variant.gene_sort
+          .split(/[;,]/)
+          .map((g: string) => g.trim())
+          .filter(Boolean)
+      : [];
 
-  const traitNames = Array.isArray(variant.trait_set)
-    ? variant.trait_set
-        .map((trait: { trait_name?: string }) => trait.trait_name?.trim())
-        .filter(Boolean)
-    : [];
+  const traitNames =
+    Array.isArray(variant.trait_set)
+      ? variant.trait_set
+          .map((t: any) => t.trait_name)
+          .filter(Boolean)
+      : [];
+
+  const molecularConsequences =
+    Array.isArray(variant.molecular_consequence_list)
+      ? variant.molecular_consequence_list.map((c: any) => c.description)
+      : [];
+
+  const hgvsExpressions =
+    Array.isArray(variant.hgvs)
+      ? variant.hgvs.map((h: any) => h.expression)
+      : [];
+
+  const rcvAccessions =
+    Array.isArray(variant.rcv_accessions)
+      ? variant.rcv_accessions.map((r: any) => r.accession)
+      : [];
 
   return {
     clinvarId,
-    title: variant.title ?? "",
-    classification:
-      variant.germline_classification?.description ?? "Unknown significance",
-    reviewStatus: variant.germline_classification?.review_status ?? "Not provided",
     accession: variant.accession ?? "",
+
+    title: variant.title ?? "",
+
+    classification:
+      variant.germline_classification?.description ??
+      variant.clinical_significance?.description ??
+      "Unknown",
+
+    reviewStatus:
+      variant.germline_classification?.review_status ??
+      variant.clinical_significance?.review_status ??
+      "Not provided",
+
     variantType: formatVariationType(variant.obj_type),
+
     proteinChange: variant.protein_change ?? null,
-    germlineDescription: variant.germline_classification?.description ?? null,
+
+    germlineDescription:
+      variant.germline_classification?.description ?? null,
+
     genes,
     traitNames,
+
     geneSummary,
     geneSymbol: gene.symbol,
     geneId: gene.gene_id ?? null,
+
     links: {
       clinvar: `https://www.ncbi.nlm.nih.gov/clinvar/variation/${clinvarId}`,
       gene: gene.gene_id
         ? `https://www.ncbi.nlm.nih.gov/gene/${gene.gene_id}`
         : null,
     },
-  } satisfies ClinvarVariantAnalysis;
+
+    /* EXTRA DATA RETURNED */
+
+    rsid: variant.rsid ?? null,
+
+    hgvs: hgvsExpressions,
+
+    molecularConsequences,
+
+    rcvAccessions,
+
+    lastEvaluated:
+      variant.germline_classification?.last_evaluated ?? null,
+
+    submitterCount:
+      variant.supporting_submissions?.submitter_count ?? null,
+
+    submissions:
+      variant.supporting_submissions?.scv ?? [],
+
+    variationSet: variant.variation_set ?? [],
+
+    rawClinvarData: variant,
+  };
 }
 
 function formatVariationType(value?: string) {

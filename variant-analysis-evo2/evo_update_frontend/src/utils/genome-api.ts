@@ -60,33 +60,90 @@ export interface GeneAnalysisSummary {
 
 export interface ClinvarVariantAnalysis {
   clinvarId: string;
+  accession: string;
+
   title: string;
+  variantType: string;
+
   classification: string;
   reviewStatus: string;
-  accession: string;
-  variantType: string;
+
   proteinChange: string | null;
   germlineDescription: string | null;
+
   genes: string[];
-  traitNames: string[];
-  geneSummary: string | null;
   geneSymbol: string;
   geneId: string | null;
+  geneSummary: string | null;
+
+  traitNames: string[];
+  conditions: string[];
+
+  molecularConsequence?: string;
+  proteinChangeHgvs?: string;
+
+  alleleFrequency?: number;
+  rsid?: string;
+
+  submissions?: number;
+  lastEvaluated?: string;
+
+  publications?: string[];
+
   links: {
     clinvar: string;
     gene: string | null;
+    dbsnp?: string | null;
+    pubmed?: string[];
   };
 }
 
 export interface ClinvarVariant {
   clinvar_id: string;
+  accession?: string;
+
   title: string;
-  variation_type: string;
-  classification: string;
-  gene_sort: string;
+
   chromosome: string;
   location: string;
+
+  reference?: string;
+  alternative?: string;
+
+  variation_type: string;
+
+  classification: string;
+  review_status?: string;
+
+  gene_sort: string;
+
+  gene_symbol?: string;
+  gene_id?: string;
+
+  trait_names?: string[];
+
+  protein_change?: string;
+
+  molecular_consequence?: string;
+
+  rsid?: string;
+
+  allele_frequency?: number;
+
+  submissions?: number;
+
+  last_evaluated?: string;
+
+  publications?: string[];
+
+  links?: {
+    clinvar?: string;
+    dbsnp?: string;
+    gene?: string;
+  };
+
   ncbiAnalysis?: ClinvarVariantAnalysis;
+
   isAnalyzing?: boolean;
   detailError?: string;
 }
@@ -265,11 +322,19 @@ export async function searchClinvarVariant({
   chromosome,
   position,
   alternative,
+  reference,
+  rsid,
+  gene,
   genomeId,
 }: {
   chromosome: string;
   position: number;
   alternative: string;
+
+  reference?: string;
+  rsid?: string;
+  gene?: string;
+
   genomeId: string;
 }): Promise<ClinvarVariant | null> {
   return parseJsonResponse(
@@ -282,6 +347,9 @@ export async function searchClinvarVariant({
         chromosome,
         position,
         alternative,
+        reference,
+        rsid,
+        gene,
         genomeId,
       }),
     }),
