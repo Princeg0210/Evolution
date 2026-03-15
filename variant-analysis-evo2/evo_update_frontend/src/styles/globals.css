@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -170,4 +171,137 @@ html {
   transform: translate(-50%, -50%);
   z-index: 9998;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* IGV Integrated Styling Overrides */
+.igv-toolbar,
+.igv-navbar,
+.igv-nav-bar,
+.igv-control-bar,
+.igv-control-panel {
+  background: rgba(5, 150, 105, 0.1) !important;
+  border-bottom: 1px solid rgba(5, 150, 105, 0.25) !important;
+  color: #0A2818 !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05) !important;
+  border-radius: 0.75rem 0.75rem 0 0 !important;
+  overflow: hidden !important;
+  margin-bottom: 0 !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.igv-toolbar .igv-button,
+.igv-navbar .igv-button,
+.igv-nav-bar button,
+.igv-control-bar button {
+  background: rgba(5, 150, 105, 0.08) !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+  color: #0A2818 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.35rem 0.6rem !important;
+  min-width: 2.25rem !important;
+}
+
+.igv-toolbar .igv-button:hover,
+.igv-navbar .igv-button:hover,
+.igv-nav-bar button:hover,
+.igv-control-bar button:hover {
+  background: rgba(5, 150, 105, 0.18) !important;
+}
+
+.igv-navbar .igv-label,
+.igv-navbar .igv-logo,
+.igv-toolbar .igv-label,
+.igv-toolbar .igv-logo {
+  color: #0A2818 !important;
+  font-weight: 600 !important;
+}
+
+.igv-toolbar .igv-button svg,
+.igv-navbar .igv-button svg,
+.igv-nav-bar button svg {
+  stroke: #FFFFFF !important;
+  fill: #FFFFFF !important;
+}
+
+.igv-navbar .igv-label svg,
+.igv-toolbar .igv-label svg,
+.igv-nav-bar .igv-label svg {
+  stroke: #0A2818 !important;
+  fill: #0A2818 !important;
+}
+
+.igv-navbar select,
+.igv-toolbar select,
+.igv-nav-bar select {
+  background: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(5, 150, 105, 0.25) !important;
+  color: #0A2818 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+/* Highlight RefSeq dropdown so it's easy to spot */
+.igv-navbar select:focus,
+.igv-toolbar select:focus,
+.igv-nav-bar select:focus {
+  box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.25) !important;
+}
+
+.igv-navbar select option,
+.igv-toolbar select option,
+.igv-nav-bar select option {
+  background: #FFFFFF !important;
+  color: #0A2818 !important;
+}
+
+/* Hide default IGV logo and reduce toolbar clutter */
+.igv-logo,
+.igv-toolbar .igv-logo,
+.igv-navbar .igv-logo {
+  display: none !important;
+}
+
+/* Make the toolbar a bit more compact */
+.igv-toolbar,
+.igv-navbar,
+.igv-nav-bar {
+  min-height: 36px !important;
+  padding: 0.25rem 0.75rem !important;
+}
+
+/* Style RefSeq/other dropdowns and buttons to match the app theme */
+.igv-toolbar select,
+.igv-navbar select,
+.igv-nav-bar select,
+.igv-toolbar .igv-button,
+.igv-navbar .igv-button,
+.igv-nav-bar button {
+  box-shadow: none !important;
+}
+
+.igv-toolbar .igv-label,
+.igv-navbar .igv-label,
+.igv-nav-bar .igv-label {
+  font-size: 10px !important;
+  letter-spacing: 0.08em !important;
+  opacity: 0.85 !important;
+}
+
+/* Prevent toolbar overlap */
+.igv-toolbar + .igv-toolbar,
+.igv-navbar + .igv-navbar,
+.igv-nav-bar + .igv-nav-bar {
+  display: none !important;
+}
+
+/* Ensure viewer container doesn't overlap toolbar */
+.igv-viewport,
+.igv-canvas-container {
+  margin-top: 3.5rem !important;
+  padding-top: 0 !important;
+}
+
+.igv-container {
+  overflow: hidden !important;
 }
