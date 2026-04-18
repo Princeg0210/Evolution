@@ -28,7 +28,7 @@ pnpm-debug.log*
 evo2-frontend/node_modules/
 evo2-frontend/.next/
 evo2-frontend/out/
-evo2-frontend/.env*.local
+# evo2-frontend/.env*.local
 evo2-frontend/*.tsbuildinfo
 evo2-frontend/next-env.d.ts
 
