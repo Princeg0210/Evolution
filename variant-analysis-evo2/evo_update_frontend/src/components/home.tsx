@@ -167,7 +167,7 @@ export default function HomeLanding() {
   const [showDocs, setShowDocs] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
-    stagger: 100,
+    stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });

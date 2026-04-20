@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import igv from "igv";
+
+declare global {
+  interface Window {
+    igv: any;
+  }
+}
 
 type Gene = {
   symbol: string;
@@ -52,7 +57,7 @@ export default function GeneViewer({ gene, genomeId, onClose }: Props) {
       browserRef.current = null;
     }
 
-    igv.createBrowser(igvRef.current as HTMLElement, options).then(
+    window.igv.createBrowser(igvRef.current as HTMLElement, options).then(
       (browser: any) => {
         browserRef.current = browser;
       }

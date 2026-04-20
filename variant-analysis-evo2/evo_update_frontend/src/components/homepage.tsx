@@ -31,7 +31,6 @@ import {
   getGenomeChromosomes,
   searchGenes,
 } from "~/utils/genome-api";
-import GeneViewer1 from "~/components/gene-viewer1";
 
 type Mode = "browse" | "search";
 

@@ -13,7 +13,7 @@ if (typeof window === "undefined") {
     maybeLocalStorage &&
     typeof maybeLocalStorage.getItem !== "function"
   ) {
-    (globalThis as { localStorage?: undefined }).localStorage = undefined;
+    (globalThis as any).localStorage = undefined;
   }
 }
 
