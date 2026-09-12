@@ -61,17 +61,13 @@ export default function ClinVarTriagePage() {
         {/* Dataset Summary Cards */}
         <DatasetOverview data={data.dataset_overview} />
 
-        {/* Model Performance & Comparison */}
-        <ModelOverview data={data.model_overview} />
+        {/* Section 2: Model Performance & Benchmarking (Commented out per user request) */}
+        {/* <ModelOverview data={data.model_overview} /> */}
 
-        {/* Visual Charts: Feature Importance & Probability Distribution */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          <div className="lg:col-span-5">
-            <FeatureImportance features={data.feature_importance} />
-          </div>
-          <div className="lg:col-span-7">
-            <ProbabilityDistribution records={data.top_triage} />
-          </div>
+        {/* Visual Charts: Feature Importance (Commented out) & Probability Distribution */}
+        <div>
+          {/* <FeatureImportance features={data.feature_importance} /> */}
+          <ProbabilityDistribution records={data.top_triage} />
         </div>
 
         {/* Interactive Single-Variant Calculator */}
