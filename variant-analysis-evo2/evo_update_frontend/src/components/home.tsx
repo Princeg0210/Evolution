@@ -354,12 +354,24 @@ export default function HomeLanding() {
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1.5 transition-transform" />
                 </Button>
               </Link>
+              <Link href="/clinvar-triage">
+                <Button 
+                  variant="outline" 
+                  className="h-14 px-8 border-[#CDEEDA] bg-white/90 hover:bg-[#ECFDF5] text-[#114232] hover:text-[#059669] font-bold rounded-full text-base transition-all flex items-center gap-2 shadow-sm"
+                >
+                  <Dna className="h-4 w-4 text-[#059669]" />
+                  ClinVar Conflict Triage
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#ECFDF5] text-[#059669] border border-[#CDEEDA]">
+                    HC-04
+                  </span>
+                </Button>
+              </Link>
               <Button 
                 onClick={() => setShowDocs(true)}
                 variant="ghost" 
                 className="h-14 px-10 text-[#114232] font-bold hover:bg-[#ECFDF5] rounded-full text-lg border border-transparent hover:border-[#CDEEDA]"
               >
-                View Architecture
+                Documentation
               </Button>
             </motion.div>
           </div>

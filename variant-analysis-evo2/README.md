@@ -16,6 +16,7 @@
 - [API Reference & Integrations](#-api-reference--integrations)
 - [Installation & Local Setup](#-installation--local-setup)
 - [Environment Configuration](#-environment-configuration)
+- [Module HC-04: ClinVar Conflict Triage](#-module-hc-04--clinvar-conflict-triage)
 - [Future Enhancements & Strategic Roadmap](#-future-enhancements--strategic-roadmap)
 - [License & Acknowledgments](#-license--acknowledgments)
 
@@ -334,6 +335,99 @@ Content-Type: application/json
    npm run typecheck
    npm run lint
    ```
+
+---
+
+## ⚖️ Module HC-04 — ClinVar Conflict Triage
+
+> **Clinical Operational Prioritization System for Conflicting Genomic Interpretations**  
+> *Dedicated triage queue predicting the probability ($0.0 \le P \le 1.0$) that a ClinVar variant record contains conflicting clinical submissions requiring expert review.*
+
+### ⚠️ Scope & Operational Framing
+HC-04 is explicitly an **operational workload triage system** designed for clinical laboratory variant scientists and curation panels.  
+- **What it does**: Prioritizes ClinVar records likely to contain contradictory clinical interpretations (e.g., pathogenic vs. VUS) to optimize human expert curation queues.
+- **What it does NOT do**: It is **not** a clinical diagnostic or pathogenicity determination tool. It does not predict disease risk or patient phenotypes.
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                   HC-04 OPERATIONAL TRIAGE PIPELINE                    │
+├────────────────────────────────────────────────────────────────────────┤
+│  ClinVar (Chr 21 & 22)  ▶  Feature Pipeline (Zero Leakage)             │
+│  Permitted Inputs Only  ▶  Calibrated Model (HistGB / LightGBM)        │
+│  Strict Probability     ▶  Triage Queue ($P \in [0, 1]$) & Dashboards  │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+### 🧬 Dataset & Scope
+- **Source**: Official NCBI monthly release `variant_summary_2026-08.txt.gz` from the [ClinVar Tab-Delimited Archive](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/tab_delimited/archive/).
+- **Inclusion Criteria**:
+  - Assembly: `GRCh38`
+  - Chromosomes: `21` and `22` only
+  - Gene filter: Valid non-empty `GeneSymbol` (`GeneSymbol != ''`)
+  - Classification filter: Valid clinical significance (`ClinicalSignificance != '-'`)
+- **Target Label**: `CONFLICT = 1` if `'conflicting'` in `ClinicalSignificance.lower()`, else `0`.
+
+### 🛡️ Feature Whitelist & Zero Data Leakage Enforcement
+To ensure scientific integrity and eliminate target leakage:
+- **Permitted Inputs**:
+  - `Type` (e.g., single nucleotide variant, deletion, duplication)
+  - `GeneSymbol` (standard HGNC symbol)
+  - `Chromosome` (`21`, `22`)
+  - `Start`, `Stop` (genomic coordinates, GRCh38)
+  - `OriginSimple` (e.g., germline, somatic, unknown)
+  - `NumberSubmitters` (submitter volume)
+- **Engineered Features**:
+  - `VariantLength` ($\max(1, \text{Stop} - \text{Start} + 1)$)
+  - `IsSingleNucleotide` (boolean indicator)
+  - `LogNumberSubmitters` ($\log(1 + \text{NumberSubmitters})$)
+  - Fold-fitted frequency encodings (`GeneFrequency`, `TypeFrequency`, `OriginFrequency`)
+- **Strictly Blacklisted / Forbidden**:
+  - ❌ `ClinicalSignificance` (used *only* to construct training labels, never an input)
+  - ❌ `ReviewStatus` (submission review status)
+  - ❌ `VariationID` (ClinVar internal identifier)
+  - ❌ Evo2 model features & DNA nucleotide sequences
+  - ❌ External conflict databases or lookups
+- **Leakage Prevention**: All category frequency encoders and scalers are fitted strictly inside the training fold and applied to validation/test folds without out-of-fold visibility.
+
+### 🔬 Candidate Models & Probability Calibration
+The research suite compares four distinct candidate architectures:
+1. **Scaled Logistic Regression** (L2-regularized linear baseline with StandardScaler)
+2. **LightGBM Classifier** (Gradient boosted trees with leaf-wise expansion)
+3. **CatBoost Classifier** (Ordered boosting with native categorical handling)
+4. **HistGradientBoosting Classifier** (Fast histogram-based gradient boosting)
+
+All models undergo probability calibration (Platt Sigmoid / Isotonic Regression) to guarantee calibrated probabilities bounded strictly in $[0.0, 1.0]$.
+
+### 📊 Evaluation Metrics
+- **Average Precision (AP)**: Primary metric under significant class imbalance (~15% conflict prevalence).
+- **Recall@10%**: Fraction of total conflicting variants captured within the top 10% highest-priority triage queue.
+- **Brier Score**: Quadratic accuracy of probabilistic predictions.
+- **Calibration Utility**: Defined as $1 - \text{Brier Score}$.
+- **Mean Per-Gene AP**: Average Precision evaluated independently on genes with $\ge 20$ records and both classes present.
+
+### 🧪 Research Studies & Empirical Validation
+- **Feature Ablation**: Isolates incremental gains from Model A (raw metadata) to Model B (+numerical/log submitters) to Model C (+training-fit frequency priors).
+- **Gene Generalization**: Compares models trained with vs. without `GeneSymbol` to quantify generalizability on uncharacterized novel loci.
+- **Subgroup Robustness**: Stratifies performance across chromosomes (21 vs 22), variant types (SNVs vs indels), submitter densities (low vs high), and gene volumes.
+- **Error Analysis**: Documents false-positive and false-negative drivers in `ERROR_ANALYSIS.md`.
+
+### 💻 Running the HC-04 Pipeline
+```bash
+# 1. Download official ClinVar archive
+python -m hc04.download
+
+# 2. Filter Chr 21 & 22 and extract features
+python -m hc04.preprocess
+
+# 3. Train models, run benchmarks, and generate publication figures
+python -m hc04.train
+
+# 4. Run automated test suite
+pytest tests/hc04/ -v
+
+# 5. Access interactive web dashboard
+# Navigate to: http://localhost:3000/clinvar-triage
+```
 
 ---
 

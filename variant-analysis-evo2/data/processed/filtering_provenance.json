@@ -1,0 +1,36 @@
+{
+  "dataset_filename": "variant_summary_2026-08.txt.gz",
+  "dataset_sha256": "bac517e0b51303f94963dbf98d8285052c437a372338d52f8bc203e228f233a5",
+  "stages": {
+    "0_raw_records": 4400000,
+    "1_after_assembly_grch38": 2175739,
+    "2_after_chromosomes_21_22": 73203,
+    "3_after_genesymbol_valid": 73187,
+    "4_after_clinical_significance_valid": 73170
+  },
+  "final_dataset_size": 73170,
+  "chromosome_breakdown": {
+    "chr21": 25824,
+    "chr22": 47346
+  },
+  "class_distribution": {
+    "conflict_count (y=1)": 4400,
+    "non_conflict_count (y=0)": 68770,
+    "conflict_prevalence_pct": 6.01,
+    "imbalance_ratio_neg_to_pos": "15.63:1",
+    "balanced_class_weights": {
+      "class_0": 0.532,
+      "class_1": 8.3148
+    }
+  },
+  "unique_genes": 1023,
+  "permitted_columns": [
+    "Type",
+    "GeneSymbol",
+    "Chromosome",
+    "Start",
+    "Stop",
+    "OriginSimple",
+    "NumberSubmitters"
+  ]
+}

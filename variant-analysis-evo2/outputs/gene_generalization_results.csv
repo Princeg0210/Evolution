@@ -1,0 +1,3 @@
+Experiment,Average Precision,Recall@10%,Brier Score,Calibration Utility,Mean Per-Gene AP
+Model WITH GeneSymbol (Variant + Gene Context),0.3599,0.5273,0.0456,0.9544,0.3296
+Model WITHOUT GeneSymbol (Pure Genomic / Variant Properties),0.3547,0.5159,0.0458,0.9542,0.3528

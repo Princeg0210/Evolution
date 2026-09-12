@@ -1,0 +1,4 @@
+Method,Brier Score,Calibration Utility,Average Precision,Recall@10%
+raw,0.133,0.867,0.3599,0.5273
+sigmoid,0.0456,0.9544,0.3599,0.5273
+isotonic,0.0454,0.9546,0.3454,0.5307

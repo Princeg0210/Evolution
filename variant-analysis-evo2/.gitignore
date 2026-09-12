@@ -24,7 +24,14 @@ pnpm-debug.log*
 !.vscode/extensions.json
 *.sublime-workspace
 
-# Frontend (evo2-frontend - Next.js)
+# Frontend (evo_update_frontend & evo2-frontend - Next.js)
+evo_update_frontend/node_modules/
+evo_update_frontend/.next/
+evo_update_frontend/out/
+evo_update_frontend/.env*.local
+evo_update_frontend/*.tsbuildinfo
+evo_update_frontend/next-env.d.ts
+
 evo2-frontend/node_modules/
 evo2-frontend/.next/
 evo2-frontend/out/
@@ -32,17 +39,19 @@ evo2-frontend/.env*.local
 evo2-frontend/*.tsbuildinfo
 evo2-frontend/next-env.d.ts
 
-# Backend (evo2-backend - Python/Modal)
-evo2-backend/__pycache__/
-evo2-backend/*.pyc
-evo2-backend/*.pyo
-evo2-backend/*.pyd
-evo2-backend/.venv/
-evo2-backend/venv/
-evo2-backend/env/
-evo2-backend/*.env
-evo2-backend/.env
-evo2-backend/.modal*
-evo2-backend/brca1_analysis_plot.png
-
+# Backend (Python / Modal)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.venv/
+venv/
+env/
+*.env
 .env
+.modal*
+
+# Large Raw Datasets & Intermediate Artifacts
+data/raw/*.gz
+catboost_info/

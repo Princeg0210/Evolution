@@ -1,0 +1,10 @@
+Group,Samples,Conflict Count,AP,Recall@10%,Brier,Calibration Utility
+Chromosome 21,5260,371,0.438,0.5553,0.0498,0.9502
+Chromosome 22,9374,509,0.2952,0.4971,0.0433,0.9567
+Type: single nucleotide variant,13291,847,0.3682,0.5171,0.048,0.952
+Type: Deletion,630,14,0.1324,0.5714,0.0213,0.9787
+Type: Duplication,282,5,0.112,0.2,0.0183,0.9817
+Submitters: Low (1-2 submitters),12192,313,0.2064,0.639,0.0222,0.9778
+Submitters: High (>=3 submitters),2442,567,0.4266,0.2293,0.1628,0.8372
+Genes: Common (Higher variant density),14275,879,0.3601,0.5176,0.0467,0.9533
+Genes: Rare (Lower variant density),359,1,0.5,1.0,0.0023,0.9977

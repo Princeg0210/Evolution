@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -144,6 +145,17 @@ export default function HomePage() {
     <div className="relative min-h-screen flex flex-col">
       {/* Header */}
       <header className="relative z-10 border-b border-white/20 bg-white/20 backdrop-blur-md">
+        <div className="container mx-auto px-6 pt-4 pb-0 flex justify-between items-center text-xs">
+          <Link href="/" className="text-[#0A2818] hover:text-[#059669] font-medium flex items-center gap-1 transition-colors">
+            &larr; GenomeX AI Home
+          </Link>
+          <Link
+            href="/clinvar-triage"
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#ECFDF5] border border-[#CDEEDA] text-[#059669] hover:bg-[#CDEEDA]/60 font-semibold text-xs transition-colors shadow-sm"
+          >
+            ClinVar Conflict Triage (HC-04) &rarr;
+          </Link>
+        </div>
         <div className="container mx-auto px-6 py-8 md:py-10">
           <div className="flex flex-col items-center justify-center text-center">
             <motion.div

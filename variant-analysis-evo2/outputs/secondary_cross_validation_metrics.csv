@@ -1,0 +1,8 @@
+Metric,5-Fold CV Score
+average_precision,0.3531
+recall_at_10pct,0.5366
+brier_score,0.0451
+calibration_utility,0.9549
+mean_per_gene_ap,0.3186
+roc_auc,0.9087
+model,lightgbm

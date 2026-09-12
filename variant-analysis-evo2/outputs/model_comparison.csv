@@ -1,0 +1,4 @@
+Model,Average Precision,Recall@10%,Brier Score,Calibration Utility,Mean Per-Gene AP,ROC AUC
+logistic_regression,0.2573,0.4307,0.0488,0.9512,0.3708,0.884
+lightgbm,0.3599,0.5273,0.0456,0.9544,0.3296,0.9057
+catboost,0.3525,0.517,0.0454,0.9546,0.3462,0.9083
